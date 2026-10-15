@@ -6,6 +6,7 @@ on:
       - "main"
 jobs:
   test:
+    timeout-minutes: 60
     name: Unit, Integration Test
     runs-on: ubuntu-latest
     steps:
