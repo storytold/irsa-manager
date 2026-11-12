@@ -19,34 +19,34 @@ jobs:
 
     steps:
       - name: Harden runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.4.0
 
         # For multi platform build. See https://docs.docker.com/build/ci/github-actions/multi-platform/
       - name: Set up QEMU
-        uses: step-security/setup-qemu-action@8c4aef027ab2df56e08f597afe6dd8cd31cb84f5 # v3.7.0
+        uses: step-security/setup-qemu-action@v3.7.0
       - name: Set up Docker Buildx
-        uses: step-security/setup-buildx-action@c60a792b446ef83310733d5cd9d0c8d6870d043f # v3.12.0
+        uses: step-security/setup-buildx-action@v3.12.0
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: step-security/metadata-action@21378f5b76c96c69ac34d21cc3873d85e26381b1 # v6.2.0
+        uses: step-security/metadata-action@v6.2.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=semver,pattern={{version}}
       - name: Login to Container Registry
-        uses: step-security/docker-login-action@6aa05fe688caf2c58e784663f01b3415ced503e8 # v3.7.0
+        uses: step-security/docker-login-action@v3.7.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.PAT }}
 
       - name: Build and push Docker image
-        uses: step-security/docker-build-push-action@b736dc8a921e02a288f956d3dd9111e276a4cfec # v7.4.0
+        uses: step-security/docker-build-push-action@v7.4.0
         with:
           context: .
           push: true
@@ -60,11 +60,11 @@ jobs:
       contents: write
     steps:
       - name: Harden runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@v2.22.4
         with:
           egress-policy: audit
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.4.0
         with:
           fetch-depth: 0
       - name: Configure Git
@@ -72,14 +72,14 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: Install Helm
-        uses: step-security/setup-helm@104176d810f424da7451a3fe25620d40c4dfb883 # v5.0.1
+        uses: step-security/setup-helm@v5.0.1
       - name: sed
         run: |
           sed -i "s/CHART_VERSION/${{ github.ref_name }}/" charts/irsa-manager/Chart.yaml
           sed -i "s/APP_VERSION/${{ github.ref_name }}/" charts/irsa-manager/Chart.yaml
           sed -i "s/APP_VERSION/${{ github.ref_name }}/" charts/irsa-manager/values.yaml
       - name: Run chart-releaser
-        uses: step-security/chart-releaser-action@2b48db14caa239f19dc7940b87eec9ef439abf33 # v1.7.0
+        uses: step-security/chart-releaser-action@v1.7.0
         with:
           config: cr.yaml
         env:
